@@ -1,5 +1,8 @@
 .PHONY: install run backend frontend
 
+# Unterdrueckt stoerende Python-Warnungen (wie z.B. Experimental Features)
+export PYTHONWARNINGS=ignore
+
 # ---------------------------------------------------------
 # Installiert alle noetigen Abhaengigkeiten (Python & Node)
 # ---------------------------------------------------------
@@ -15,19 +18,17 @@ install:
 # ---------------------------------------------------------
 run:
 	@echo "========================================================="
-	@echo " Starte Backend und Frontend..."
-	@echo " HINWEIS: Da Makefile-Hintergrundprozesse auf Windows und"
-	@echo " Linux unterschiedlich reagieren, startest du am besten"
-	@echo " einfach zwei Terminals fuer maximale Uebersicht:"
-	@echo "   Terminal 1: make backend"
-	@echo "   Terminal 2: make frontend"
+	@echo " Starte Backend und Frontend parallel..."
+	@echo ""
+	@echo " Alternativ kannst du Backend und Frontend in zwei getrennten"
+	@echo " Terminals starten (make backend / make frontend)."
+	@echo " Damit hast du mehr Uebersicht ueber die Konsolenmeldungen."
 	@echo "========================================================="
-	@echo "--- Starte jetzt das Backend in DIESEM Terminal..."
-	uv run adk api_server app
+	@make -j 2 backend frontend
 
 backend:
 	@echo "--- Starte ADK API Server..."
-	uv run adk api_server app
+	uv run --link-mode=copy adk api_server app
 
 frontend:
 	@echo "--- Starte Vite Development Server..."
