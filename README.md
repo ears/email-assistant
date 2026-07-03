@@ -103,15 +103,7 @@ Wenn alle Voraussetzungen erfuellt sind, tippe in deinem Terminal einfach:
 ```bash
 make deploy
 ```
-Das Skript erinnert dich noch einmal an die Voraussetzungen, baut den Container dann automatisch in der Cloud und spuckt dir am Ende die fertige, weltweite HTTPS-URL aus!
-
-### Fehler "403 Forbidden" beheben (Oeffentlicher Zugriff)
-Standardmaessig ist dein neuer Cloud Run Service aus Sicherheitsgruenden **privat**. Ein normales Google-Login im Browser reicht nicht aus, um die Seite zu sehen (es erfordert ein API-Token). 
-Um deine App als oeffentlichen Prototypen fuer jeden freizugeben, tippe diesen Befehl in dein Terminal:
-
-```bash
-gcloud run services add-iam-policy-binding email-assistant --region=us-central1 --member=allUsers --role=roles/run.invoker
-```
+Das Skript erinnert dich noch einmal an die Voraussetzungen, baut den Container dann automatisch in der Cloud, spuckt dir am Ende die fertige, weltweite HTTPS-URL aus und schaltet den Service **automatisch oeffentlich**, sodass jeder sofort auf den Prototyp zugreifen kann!
 
 ### Den Service wieder entfernen (Undeploy)
 

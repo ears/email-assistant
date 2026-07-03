@@ -60,6 +60,8 @@ deploy:
 	@uv run python -c "input('>>> Wenn alles erfuellt ist, druecke ENTER fuer das Deployment... ')"
 	@echo "--- Starte automatischen Cloud-Build und Deployment..."
 	@uv run python -c "import subprocess, sys; p = subprocess.check_output('gcloud config get-value project', shell=True, text=True).strip(); sys.exit(subprocess.call(f'uvx google-agents-cli deploy --no-confirm-project --project {p}', shell=True))"
+	@echo "--- Mache den Service oeffentlich (Public Access)..."
+	@gcloud run services add-iam-policy-binding email-assistant --region=us-central1 --member=allUsers --role=roles/run.invoker --quiet
 
 # ---------------------------------------------------------
 # Entfernt den Service aus der Cloud
