@@ -29,6 +29,7 @@ run:
 	@echo "*                                                        *"
 	@echo "**********************************************************"
 	@echo ""
+	@uv run python -c "input('>>> Druecke ENTER, um die Server zu starten... ')"
 	@make -j 2 backend frontend
 
 backend:
