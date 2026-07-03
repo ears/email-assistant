@@ -69,6 +69,7 @@ undeploy:
 	@echo "========================================================="
 	@echo "   LOESCHE SERVICE AUS DER GOOGLE CLOUD"
 	@echo "========================================================="
+	@uv run python -c "input('>>> ACHTUNG: Der Service wird geloescht. Druecke ENTER zum Bestaetigen oder STRG+C zum Abbrechen... ')"
 	@echo "--- Entferne Cloud Run Service 'email-assistant'..."
 	gcloud run services delete email-assistant --region=us-central1 --quiet
 	@echo "--- Service erfolgreich geloescht!"
