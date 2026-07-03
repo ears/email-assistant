@@ -17,13 +17,18 @@ install:
 # Startet die Server
 # ---------------------------------------------------------
 run:
-	@echo "========================================================="
-	@echo " Starte Backend und Frontend parallel..."
 	@echo ""
-	@echo " Alternativ kannst du Backend und Frontend in zwei getrennten"
-	@echo " Terminals starten (make backend / make frontend)."
-	@echo " Damit hast du mehr Uebersicht ueber die Konsolenmeldungen."
-	@echo "========================================================="
+	@echo "**********************************************************"
+	@echo "*                                                        *"
+	@echo "*     EMAIL ASSISTANT STARTET JETZT...                   *"
+	@echo "*                                                        *"
+	@echo "*     1. Ignoriere alle 'Warnings' (z.B. --reload).      *"
+	@echo "*     2. Ignoriere die Adresse http://127.0.0.1:8000.    *"
+	@echo "*                                                        *"
+	@echo "*  -> OEFFNE DEINEN BROWSER HIER: http://localhost:5173  *"
+	@echo "*                                                        *"
+	@echo "**********************************************************"
+	@echo ""
 	@make -j 2 backend frontend
 
 backend:
