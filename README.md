@@ -113,6 +113,16 @@ Um deine App als oeffentlichen Prototypen fuer jeden freizugeben, tippe diesen B
 gcloud run services add-iam-policy-binding email-assistant --region=us-central1 --member=allUsers --role=roles/run.invoker
 ```
 
+### Den Service wieder entfernen (Undeploy)
+
+Wenn du das Projekt nicht mehr benoetigst und Kosten sparen moechtest, kannst du den Cloud Run Service jederzeit wieder loeschen. Ein einzelner Befehl reicht:
+
+```bash
+make undeploy
+```
+
+Dadurch wird der aktive `email-assistant` Service in der Region `us-central1` unwiderruflich aus deinem Google Cloud Projekt entfernt.
+
 ---
 
 ## Tests & Evaluation

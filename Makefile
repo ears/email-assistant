@@ -1,4 +1,4 @@
-.PHONY: install run backend frontend deploy
+.PHONY: install run backend frontend deploy undeploy
 
 # Unterdrueckt stoerende Python-Warnungen (wie z.B. Experimental Features)
 export PYTHONWARNINGS=ignore
@@ -60,3 +60,15 @@ deploy:
 	@uv run python -c "input('>>> Wenn alles erfuellt ist, druecke ENTER fuer das Deployment... ')"
 	@echo "--- Starte automatischen Cloud-Build und Deployment..."
 	uvx google-agents-cli deploy --no-confirm-project
+
+# ---------------------------------------------------------
+# Entfernt den Service aus der Cloud
+# ---------------------------------------------------------
+undeploy:
+	@echo ""
+	@echo "========================================================="
+	@echo "   LOESCHE SERVICE AUS DER GOOGLE CLOUD"
+	@echo "========================================================="
+	@echo "--- Entferne Cloud Run Service 'email-assistant'..."
+	gcloud run services delete email-assistant --region=us-central1 --quiet
+	@echo "--- Service erfolgreich geloescht!"
