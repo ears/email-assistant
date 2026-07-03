@@ -32,7 +32,12 @@ Oeffne ein Terminal im Projektordner und installiere alle Abhaengigkeiten (Front
 ```bash
 make install
 ```
-Oeffne danach **zwei Terminals**, um die Server zu starten:
+Starte danach beide Server (Frontend & Backend) ganz einfach mit einem Befehl:
+```bash
+make run
+```
+
+*Optional:* Falls du die Server lieber getrennt in **zwei Terminals** starten moechtest:
 ```bash
 # Terminal 1
 make backend
