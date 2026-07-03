@@ -1,4 +1,4 @@
-.PHONY: install run backend frontend
+.PHONY: install run backend frontend deploy
 
 # Unterdrueckt stoerende Python-Warnungen (wie z.B. Experimental Features)
 export PYTHONWARNINGS=ignore
@@ -38,3 +38,25 @@ backend:
 frontend:
 	@echo "--- Starte Vite Development Server..."
 	cd frontend && npm run dev
+
+# ---------------------------------------------------------
+# Deployment in die Google Cloud
+# ---------------------------------------------------------
+deploy:
+	@echo ""
+	@echo "========================================================="
+	@echo "   VORAUSSETZUNGEN FUER DAS GOOGLE CLOUD DEPLOYMENT"
+	@echo "========================================================="
+	@echo " 1. CLI: Die 'Google Cloud CLI' (gcloud) muss installiert sein."
+	@echo " 2. LOGIN: Du musst eingeloggt sein -> 'gcloud auth login'"
+	@echo " 3. PROJEKT: Ein aktives Projekt muss gesetzt sein -> 'gcloud config set project DEIN_PROJEKT_ID'"
+	@echo " 4. APIs: Folgende APIs muessen im Cloud-Projekt aktiviert sein:"
+	@echo "    - Cloud Build API    (cloudbuild.googleapis.com)"
+	@echo "    - Cloud Run API      (run.googleapis.com)"
+	@echo "    - Secret Manager API (secretmanager.googleapis.com)"
+	@echo " 5. BILLING: Fuer das Projekt muss ein Rechnungskonto hinterlegt sein."
+	@echo "========================================================="
+	@echo ""
+	@uv run python -c "input('>>> Wenn alles erfuellt ist, druecke ENTER fuer das Deployment... ')"
+	@echo "--- Starte automatischen Cloud-Build und Deployment..."
+	uvx google-agents-cli deploy --no-confirm-project
