@@ -70,6 +70,51 @@ Die Web-Oberflaeche ist nun unter [http://localhost:5173](http://localhost:5173)
 
 ---
 
+## Cloud Deployment (Produktion)
+
+Sobald der Email Assistant lokal perfekt laeuft, kannst du ihn mit einem einzigen Befehl als Serverless-App auf **Google Cloud Run** hochladen. 
+
+Wir nutzen dafuer eine hochoptimierte "Single Container"-Architektur:
+- Ein Multi-Stage Dockerfile baut das React-Frontend (`npm run build`).
+- Der Python/FastAPI Server liefert anschliessend nicht nur die KI-API aus, sondern auch die fertigen React-HTML-Dateien. Frontend und Backend laufen so unter einer einzigen URL und demselben Port!
+
+### Voraussetzungen fuer das Deployment
+
+Bevor du deployen kannst, muessen folgende Punkte auf deinem Rechner und in der Google Cloud erfuellt sein:
+
+1. **Google Cloud CLI (`gcloud`)** muss auf deinem Rechner [installiert](https://cloud.google.com/sdk/docs/install) sein.
+2. Du musst **eingeloggt** sein. Oeffne dein Terminal und tippe:
+   ```bash
+   gcloud auth login
+   ```
+3. Du benoetigst ein aktives **Google Cloud Projekt**, das du in deinem Terminal auswaehlst:
+   ```bash
+   gcloud config set project DEINE_PROJEKT_ID
+   ```
+4. Folgende **APIs** muessen in deinem Cloud-Projekt aktiviert sein (Tipp: Suche in der Google Cloud Console nach "APIs & Services"):
+   - Cloud Build API (`cloudbuild.googleapis.com`)
+   - Cloud Run API (`run.googleapis.com`)
+   - Secret Manager API (`secretmanager.googleapis.com`)
+5. Fuer dein Projekt muss in der Google Cloud Console ein **Rechnungskonto (Billing)** aktiviert sein.
+
+### Das Deployment starten
+
+Wenn alle Voraussetzungen erfuellt sind, tippe in deinem Terminal einfach:
+```bash
+make deploy
+```
+Das Skript erinnert dich noch einmal an die Voraussetzungen, baut den Container dann automatisch in der Cloud und spuckt dir am Ende die fertige, weltweite HTTPS-URL aus!
+
+### Fehler "403 Forbidden" beheben (Oeffentlicher Zugriff)
+Standardmaessig ist dein neuer Cloud Run Service aus Sicherheitsgruenden **privat**. Ein normales Google-Login im Browser reicht nicht aus, um die Seite zu sehen (es erfordert ein API-Token). 
+Um deine App als oeffentlichen Prototypen fuer jeden freizugeben, tippe diesen Befehl in dein Terminal:
+
+```bash
+gcloud run services add-iam-policy-binding email-assistant --region=us-central1 --member=allUsers --role=roles/run.invoker
+```
+
+---
+
 ## Tests & Evaluation
 
 Dieses Projekt verfuegt ueber eine automatisierte Qualitaetssicherung. Um die Test-Szenarien (Prompt-Injection-Abwehr, Halluzinationstests) auszufuehren, nutze:
