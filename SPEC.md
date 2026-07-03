@@ -42,3 +42,10 @@ Die Test-Pipeline wird ueber folgenden CLI-Befehl lokal oder in der GitHub CI/CD
 uvx google-agents-cli eval run --dataset tests/eval/datasets/email-dataset.json --config tests/eval/eval_config.yaml
 ```
 Das Ergebnis wird automatisch im Ordner `artifacts/grade_results/` als HTML-Report abgelegt.
+
+## Developer Experience (DX) & Konsolen-Ausgabe
+
+Um das Projekt idiotensicher fuer nicht-technische Nutzer zu machen, gelten folgende strenge Regeln fuer das Tooling (z.B. das `Makefile`):
+1. **Kein Kommandozeilen-Spam:** Unterdruecke irrelevante Warnungen. Setze `export PYTHONWARNINGS=ignore` und nutze `--no-reload` bei Uvicorn/ADK, um unnoetige Fehler auf Windows zu vermeiden. Warnungen zum Hardlink-Fallback von `uv` werden mit `--link-mode=copy` unterdrueckt.
+2. **Klares Onboarding-Banner:** Wenn der Nutzer den Server startet (`make run`), darf er nicht von Logs ueberflutet werden. Drucke ein gigantisches, unmissverstaendliches ASCII-Banner aus, das ihm exakt sagt, welche lokale URL er im Browser oeffnen muss (z.B. `http://localhost:5173`) und welche er ignorieren soll (die API-URL).
+3. **Cross-Platform & ASCII-Treue:** Terminal-Ausgaben muessen auf Windows CMD, PowerShell und Linux gleichermaessen funktionieren. Verzichte auf Unicode-Smileys und deutsche Umlaute in Skripten und Markdowns (`ae` statt `ä`). Baue Pausen-Befehle plattformunabhaengig (z.B. via `uv run python -c "input('...')"`).
