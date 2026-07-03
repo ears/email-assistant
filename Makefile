@@ -5,7 +5,7 @@
 # ---------------------------------------------------------
 install:
 	@echo "--- Installiere Python Backend-Abhaengigkeiten via uv..."
-	uv sync
+	uv sync --link-mode=copy
 	@echo "--- Installiere React Frontend-Abhaengigkeiten via npm..."
 	cd frontend && npm install
 	@echo "--- Installation komplett! Du kannst nun 'make run' nutzen."
