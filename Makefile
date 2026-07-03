@@ -33,7 +33,7 @@ run:
 
 backend:
 	@echo "--- Starte ADK API Server..."
-	uv run --link-mode=copy adk api_server app
+	uv run --link-mode=copy adk api_server app --no-reload
 
 frontend:
 	@echo "--- Starte Vite Development Server..."
