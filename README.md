@@ -1,86 +1,78 @@
-# email-assistant
+# 📧 Smart Inbox Triage & Draft Agent
 
-Simple ReAct agent
-Agent generated with `agents-cli` version `0.5.0`
+Dies ist ein Übungsprojekt, das vollständig im Rahmen eines **Vibe Coding**-Workflows mithilfe des Google Agent Development Kits (ADK) erstellt wurde.
 
-## Project Structure
+## 🎯 Sinn des Projekts
+Das Ziel dieses Projekts ist es, die Konzepte des Vibe Codings und der Agenten-Architektur praktisch zu erlernen. Der **Email Assistant** demonstriert:
+1. **Agentic Workflow:** Ein LLM-Agent nutzt Tools, um Dummy-Mails zu lesen, Kategorien zu bilden (URGENT, NEWSLETTERS, CUSTOMER INQUIRY) und automatisch Antworten (z.B. aus FAQ-Daten) zu entwerfen.
+2. **Human-in-the-Loop:** Eine moderne React-Web-UI ermöglicht es dem Nutzer, die Entwürfe des Agenten zu prüfen, zu bearbeiten und jede E-Mail einzeln zum Versand freizugeben.
+3. **Spec-Driven Coding:** Das Projekt wird zentral über die `SPEC.md` gesteuert.
+4. **Evaluations:** Integrierte LLM-as-a-Judge Tests, um Halluzinationen zu vermeiden und Safety-Guardrails abzusichern.
 
-```
-email-assistant/
-├── app/         # Core agent code
-│   ├── agent.py               # Main agent logic
-│   └── app_utils/             # App utilities and helpers
-├── tests/                     # Unit, integration, and load tests
-├── GEMINI.md                  # AI-assisted development guide
-└── pyproject.toml             # Project dependencies
-```
+## 🛠️ Technologien
+- **Backend:** Python, Google ADK (Agent Development Kit), FastAPI
+- **Frontend:** React, Vite, Vanilla CSS (Glassmorphism Lite-Mode)
+- **Tooling:** `uv` (Python Package Manager), `npm` (Node Package Manager)
 
-> 💡 **Tip:** Use [Gemini CLI](https://github.com/google-gemini/gemini-cli) for AI-assisted development - project context is pre-configured in `GEMINI.md`.
-
-## Requirements
-
-Before you begin, ensure you have:
-- **uv**: Python package manager (used for all dependency management in this project) - [Install](https://docs.astral.sh/uv/getting-started/installation/) ([add packages](https://docs.astral.sh/uv/concepts/dependencies/) with `uv add <package>`)
-- **agents-cli**: Agents CLI - Install with `uv tool install google-agents-cli`
-- **Google Cloud SDK**: For GCP services - [Install](https://cloud.google.com/sdk/docs/install)
-
-
-## Quick Start
-
-Install `agents-cli` and its skills if not already installed:
-
-```bash
-uvx google-agents-cli setup
-```
-
-Install required packages:
-
-```bash
-agents-cli install
-```
-
-Test the agent with a local web server:
-
-```bash
-agents-cli playground
-```
-
-You can also use features from the [ADK](https://adk.dev/) CLI with `uv run adk`.
-
-## Commands
-
-| Command              | Description                                                                                 |
-| -------------------- | ------------------------------------------------------------------------------------------- |
-| `agents-cli install` | Install dependencies using uv                                                         |
-| `agents-cli playground` | Launch local development environment                                                  |
-| `agents-cli lint`    | Run code quality checks                                                               |
-| `agents-cli eval`    | Evaluate agent behavior (generate, grade, analyze, and more — see `agents-cli eval --help`) |
-| `uv run pytest tests/unit tests/integration` | Run unit and integration tests                                                        |
-
-## 🛠️ Project Management
-
-| Command | What It Does |
-|---------|--------------|
-| `agents-cli scaffold enhance` | Add CI/CD pipelines and Terraform infrastructure |
-| `agents-cli infra cicd` | One-command setup of entire CI/CD pipeline + infrastructure |
-| `agents-cli scaffold upgrade` | Auto-upgrade to latest version while preserving customizations |
+## 📋 Voraussetzungen (Prerequisites)
+Bevor du startest, stelle sicher, dass folgende Werkzeuge auf deinem System (Windows, macOS oder Linux) installiert sind:
+1. **[Python (3.10+)](https://www.python.org/downloads/)**
+2. **[Node.js & npm](https://nodejs.org/)** (für das React-Frontend)
+3. **[uv](https://docs.astral.sh/uv/)** (Der rasend schnelle Python Package Manager)
+4. **Make** (Optional, aber empfohlen für den Schnellstart. Unter Linux/macOS meist vorinstalliert, unter Windows z.B. via `choco install make` oder MSYS2/Git Bash installierbar).
 
 ---
 
-## Development
+## 🚀 Installation & Ausführung
 
-Edit your agent logic in `app/agent.py` and test with `agents-cli playground` - it auto-reloads on save.
+Es gibt zwei Wege, das Projekt zu starten: den bequemen Weg über die `Makefile` oder den manuellen Weg.
 
-## Deployment
-
+### Option A: Der Schnellstart (mit Make)
+Öffne ein Terminal im Projektordner und installiere alle Abhängigkeiten (Frontend & Backend):
 ```bash
-gcloud config set project <your-project-id>
-agents-cli deploy
+make install
+```
+Öffne danach **zwei Terminals**, um die Server zu starten:
+```bash
+# Terminal 1
+make backend
+
+# Terminal 2
+make frontend
 ```
 
-To add CI/CD and Terraform, run `agents-cli scaffold enhance`.
-To set up your production infrastructure, run `agents-cli infra cicd`.
+### Option B: Der manuelle Weg
+Falls du `make` nicht installiert hast, kannst du die Server auch manuell starten:
 
-## Observability
+**1. Backend (Terminal 1):**
+```bash
+# Abhängigkeiten installieren
+uv sync
+# Server starten (Windows-Nutzer können bei Zeichensatzproblemen vorher $env:PYTHONUTF8=1 setzen)
+uv run adk api_server app
+```
 
-Built-in telemetry exports to Cloud Trace, BigQuery, and Cloud Logging.
+**2. Frontend (Terminal 2):**
+```bash
+cd frontend
+# Abhängigkeiten installieren
+npm install
+# Server starten
+npm run dev
+```
+
+Die Web-Oberfläche ist nun unter [http://localhost:5173](http://localhost:5173) in deinem Browser erreichbar!
+
+---
+
+## 🧪 Tests & Evaluation
+
+Dieses Projekt verfügt über eine automatisierte Qualitätssicherung. Um die Test-Szenarien (Prompt-Injection-Abwehr, Halluzinationstests) auszuführen, nutze:
+
+```bash
+uvx google-agents-cli eval run --dataset tests/eval/datasets/email-dataset.json --config tests/eval/eval_config.yaml
+```
+Die Ergebnisse werden als HTML-Report im Ordner `artifacts/grade_results/` abgelegt.
+
+## 📄 Architektur-Spezifikation
+Alle Details zur Agenten-Logik, den UI-Anforderungen und dem genauen Master-Prompt findest du in der [SPEC.md](SPEC.md).
