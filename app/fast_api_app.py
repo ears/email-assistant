@@ -15,6 +15,8 @@ import os
 
 import google.auth
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from google.adk.cli.fast_api import get_fast_api_app
 from google.cloud import logging as google_cloud_logging
 
@@ -40,7 +42,7 @@ artifact_service_uri = f"gs://{logs_bucket_name}" if logs_bucket_name else None
 
 app: FastAPI = get_fast_api_app(
     agents_dir=AGENT_DIR,
-    web=True,
+    web=False,
     artifact_service_uri=artifact_service_uri,
     allow_origins=allow_origins,
     session_service_uri=session_service_uri,
@@ -62,6 +64,26 @@ def collect_feedback(feedback: Feedback) -> dict[str, str]:
     """
     logger.log_struct(feedback.model_dump(), severity="INFO")
     return {"status": "success"}
+
+
+# Serve the static React frontend
+frontend_path = os.path.join(AGENT_DIR, "frontend", "dist")
+if os.path.isdir(frontend_path):
+    app.mount("/assets", StaticFiles(directory=os.path.join(frontend_path, "assets")), name="assets")
+    
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Ignore API and ADK routes
+        if full_path.startswith("api/") or full_path.startswith("adk/"):
+            return {"error": "Not found"}
+        
+        # Serve static file if it exists (e.g., favicon)
+        file_path = os.path.join(frontend_path, full_path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+            
+        # Fallback to index.html for React Router
+        return FileResponse(os.path.join(frontend_path, "index.html"))
 
 
 # Main execution

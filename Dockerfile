@@ -12,15 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Stage 1: Build React Frontend
+FROM node:20-slim AS frontend-builder
+WORKDIR /frontend
+COPY ./frontend/package*.json ./
+RUN npm install
+COPY ./frontend ./
+RUN npm run build
+
+# Stage 2: Build Python Backend
 FROM python:3.12-slim
-
 RUN pip install --no-cache-dir uv==0.8.13
-
 WORKDIR /code
 
 COPY ./pyproject.toml ./README.md ./uv.lock* ./
-
 COPY ./app ./app
+
+# Copy the built frontend from Stage 1
+COPY --from=frontend-builder /frontend/dist /code/frontend/dist
 
 RUN uv sync --frozen
 
