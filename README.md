@@ -126,5 +126,7 @@ uvx google-agents-cli eval run --dataset tests/eval/datasets/email-dataset.json 
 ```
 Die Ergebnisse werden als HTML-Report im Ordner `artifacts/grade_results/` abgelegt.
 
-## Architektur-Spezifikation
-Alle Details zur Agenten-Logik, den UI-Anforderungen und dem genauen Master-Prompt findest du in der [SPEC.md](SPEC.md).
+## Architektur & Dokumentation
+
+- **Visuelle Diagramme:** Minimalistische Schaubilder zur Single-Container-Architektur, dem Human-in-the-Loop Workflow und unserem Vibe-Coding-Prozess findest du direkt in der [DIAGRAMS.md](DIAGRAMS.md).
+- **Spezifikation:** Alle Details zur tiefen Agenten-Logik, den UI-Anforderungen und dem genauen Master-Prompt findest du in der [SPEC.md](SPEC.md).
